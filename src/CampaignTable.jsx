@@ -45,18 +45,7 @@ export default function CampaignTable({ campaign, index, isToday, onCutChange })
             ? <a href={campaign.links} target="_blank" rel="noreferrer" className="clickable-link">{campaign.links}</a>
             : <span>{campaign.links}</span>}
         </div>
-        {isToday && (
-          <div className="metadata-item">
-            <strong>CUT:</strong>
-            <select
-              className="cut-dropdown"
-              defaultValue={String(campaign.cut ?? 0)}
-              onChange={e => onCutChange(campaign, e.target.value, e.target)}
-            >
-              {['0', '10', '20', '30'].map(v => <option key={v} value={v}>{v}</option>)}
-            </select>
-          </div>
-        )}
+
       </div>
       <div className="table-wrapper">
         <table className="data-table">
