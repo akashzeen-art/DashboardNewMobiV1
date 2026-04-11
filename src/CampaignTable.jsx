@@ -1,16 +1,22 @@
-import { useState } from 'react';
-import { parseHourlyData, formatDateDisplay } from './utils';
+import { parseHourlyData } from './utils';
 
 const HOURS = Array.from({ length: 24 }, (_, i) =>
   `${String(i).padStart(2, '0')}:00-${String(i + 1).padStart(2, '0')}:00`
 );
 
-export default function CampaignTable({ campaign, index, isToday, onCutChange }) {
+function calcCR(conv, clicks) {
+  if (clicks > 0) return ((conv / clicks) * 100).toFixed(2);
+  if (conv > 0) return '100.00';
+  return '0.00';
+}
+
+export default function CampaignTable({ campaign, isToday, onCutChange }) {
   const { clicks, conversions } = parseHourlyData(campaign.hourlyData);
 
   const totalC = clicks.reduce((a, b) => a + b, 0);
   const totalConv = conversions.reduce((a, b) => a + b, 0);
-  const totalNCR = totalC > 0 ? ((totalConv / totalC) * 100).toFixed(2) : '0.00';
+  const totalNCR = calcCR(totalConv, totalC);
+  const normalCRVals = clicks.map((c, i) => calcCR(conversions[i], c));
 
   function DataRow({ label, total, values, isCR }) {
     return (
@@ -28,8 +34,6 @@ export default function CampaignTable({ campaign, index, isToday, onCutChange })
     );
   }
 
-  const normalCRVals = clicks.map((c, i) => c > 0 ? ((conversions[i] / c) * 100).toFixed(2) : '0.00');
-
   return (
     <div className="campaign-block">
       <div className="metadata-section">
@@ -40,12 +44,14 @@ export default function CampaignTable({ campaign, index, isToday, onCutChange })
           <strong>Campaign ID:</strong><span>{campaign.campaignId}</span>
         </div>
         <div className="metadata-item">
+          <strong>Product:</strong><span>{campaign.productname}</span>
+        </div>
+        <div className="metadata-item">
           <strong>Links:</strong>
           {campaign.links !== '-' && campaign.links.startsWith('http')
             ? <a href={campaign.links} target="_blank" rel="noreferrer" className="clickable-link">{campaign.links}</a>
             : <span>{campaign.links}</span>}
         </div>
-
       </div>
       <div className="table-wrapper">
         <table className="data-table">
