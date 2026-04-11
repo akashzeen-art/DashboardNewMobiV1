@@ -89,15 +89,10 @@ function escapeCSV(v) {
 }
 
 function buildCSVRows(campaign) {
-  const { clicks, conversions, stp } = parseHourlyData(campaign.hourlyData);
-  const hours = Array.from({ length: 24 }, (_, i) =>
-    `${String(i).padStart(2, '0')}:00-${String(i + 1).padStart(2, '0')}:00`
-  );
+  const { clicks, conversions } = parseHourlyData(campaign.hourlyData);
   const totalC = clicks.reduce((a, b) => a + b, 0);
   const totalConv = conversions.reduce((a, b) => a + b, 0);
-  const totalSTP = stp.reduce((a, b) => a + b, 0);
   const totalNCR = totalC > 0 ? ((totalConv / totalC) * 100).toFixed(2) : '0.00';
-  const totalSCR = totalC > 0 ? ((totalSTP / totalC) * 100).toFixed(2) : '0.00';
 
   const d = escapeCSV(campaign.dspName);
   const id = escapeCSV(campaign.campaignId);
@@ -109,9 +104,7 @@ function buildCSVRows(campaign) {
   return (
     row('Clicks', totalC, clicks) +
     row('Conversion', totalConv, conversions) +
-    row('STP', totalSTP, stp) +
-    row('Normal CR', totalNCR + '%', clicks.map((c, i) => c > 0 ? ((conversions[i] / c) * 100).toFixed(2) + '%' : '0.00%')) +
-    row('STP CR', totalSCR + '%', clicks.map((c, i) => c > 0 ? ((stp[i] / c) * 100).toFixed(2) + '%' : '0.00%'))
+    row('Normal CR', totalNCR + '%', clicks.map((c, i) => c > 0 ? ((conversions[i] / c) * 100).toFixed(2) + '%' : '0.00%'))
   );
 }
 

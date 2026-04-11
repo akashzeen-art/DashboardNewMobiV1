@@ -6,13 +6,11 @@ const HOURS = Array.from({ length: 24 }, (_, i) =>
 );
 
 export default function CampaignTable({ campaign, index, isToday, onCutChange }) {
-  const { clicks, conversions, stp } = parseHourlyData(campaign.hourlyData);
+  const { clicks, conversions } = parseHourlyData(campaign.hourlyData);
 
   const totalC = clicks.reduce((a, b) => a + b, 0);
   const totalConv = conversions.reduce((a, b) => a + b, 0);
-  const totalSTP = stp.reduce((a, b) => a + b, 0);
   const totalNCR = totalC > 0 ? ((totalConv / totalC) * 100).toFixed(2) : '0.00';
-  const totalSCR = totalC > 0 ? ((totalSTP / totalC) * 100).toFixed(2) : '0.00';
 
   function DataRow({ label, total, values, isCR }) {
     return (
@@ -31,7 +29,6 @@ export default function CampaignTable({ campaign, index, isToday, onCutChange })
   }
 
   const normalCRVals = clicks.map((c, i) => c > 0 ? ((conversions[i] / c) * 100).toFixed(2) : '0.00');
-  const stpCRVals = clicks.map((c, i) => c > 0 ? ((stp[i] / c) * 100).toFixed(2) : '0.00');
 
   return (
     <div className="campaign-block">
@@ -73,9 +70,7 @@ export default function CampaignTable({ campaign, index, isToday, onCutChange })
           <tbody>
             <DataRow label="Clicks" total={totalC} values={clicks} />
             <DataRow label="Conversion" total={totalConv} values={conversions} />
-            <DataRow label="STP" total={totalSTP} values={stp} />
             <DataRow label="Normal CR" total={totalNCR} values={normalCRVals} isCR />
-            <DataRow label="STP CR" total={totalSCR} values={stpCRVals} isCR />
           </tbody>
         </table>
       </div>
