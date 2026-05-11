@@ -169,7 +169,7 @@ export default function Dashboard({ onLogout }) {
   return (
     <div className="dashboard-container">
       <header className="dashboard-header">
-        <h1>📊 V1 Mobi Dashboard</h1>
+        <h1>📊 HOUSE Dashboard</h1>
         <button className="logout-button" onClick={onLogout}>Logout</button>
       </header>
 

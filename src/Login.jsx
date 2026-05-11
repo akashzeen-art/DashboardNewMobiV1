@@ -19,7 +19,7 @@ export default function Login({ onLogin }) {
   return (
     <div className="login-body">
       <div className="login-box">
-        <h1 className="login-title">📊 V1 Mobi Dashboard</h1>
+        <h1 className="login-title">📊 HOUSE Dashboard</h1>
         <h2 className="login-subtitle">Login to Continue</h2>
         <form className="login-form" onSubmit={handleSubmit}>
           <div className="form-group">
