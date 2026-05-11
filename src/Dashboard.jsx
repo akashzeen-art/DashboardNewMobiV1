@@ -3,7 +3,7 @@ import CampaignTable from './CampaignTable';
 import DateExportModal from './DateExportModal';
 import CutConfirmModal from './CutConfirmModal';
 import {
-  API_URL, DSP_FILTER,
+  API_URL, DSP_FILTERS,
   formatDate, formatDateDisplay,
   groupDataByDate, exportAllCSV, exportDateWiseCSV,
 } from './utils';
@@ -163,7 +163,7 @@ export default function Dashboard({ onLogout }) {
   }
 
   const exportDates = [...new Set(
-    rawData.filter(c => (c.dspName || '').trim() === DSP_FILTER).map(c => c.date).filter(Boolean)
+    rawData.filter(c => DSP_FILTERS.includes((c.dspName || '').trim())).map(c => c.date).filter(Boolean)
   )].sort();
 
   return (
@@ -230,7 +230,7 @@ export default function Dashboard({ onLogout }) {
       {error && <div className="error-banner">{error}</div>}
 
       {!loading && !error && sortedDates.length === 0 && (
-        <div className="empty-state">No KS data available for the selected date range.</div>
+        <div className="empty-state">No KS / TR / MN data available for the selected date range.</div>
       )}
 
       {sortedDates.map(date => (

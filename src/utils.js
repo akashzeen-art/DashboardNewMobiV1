@@ -1,5 +1,5 @@
 export const API_URL = 'https://postback.v1mobi.com/postbacks/hourlyReport';
-export const DSP_FILTER = 'KS';
+export const DSP_FILTERS = ['KS', 'TR', 'MN'];
 
 export function formatDate(date) {
   const y = date.getFullYear();
@@ -58,7 +58,7 @@ export function groupDataByDate(data) {
   const items = Array.isArray(data) ? data : (data ? [data] : []);
 
   items
-    .filter(c => (c.dspName || '').trim() === DSP_FILTER)
+    .filter(c => DSP_FILTERS.includes((c.dspName || '').trim()))
     .forEach(campaign => {
       const date = campaign.date || 'unknown';
       const key = `${campaign.dspName}_${campaign.campaignId}_${campaign.links}`;
@@ -122,7 +122,7 @@ export function exportAllCSV(campaigns) {
 
 export function exportDateWiseCSV(rawData, selectedDates) {
   const dateMap = new Map();
-  rawData.filter(c => (c.dspName || '') === DSP_FILTER).forEach(c => {
+  rawData.filter(c => DSP_FILTERS.includes((c.dspName || '').trim())).forEach(c => {
     const d = c.date || '';
     if (!dateMap.has(d)) dateMap.set(d, []);
     dateMap.get(d).push(c);
